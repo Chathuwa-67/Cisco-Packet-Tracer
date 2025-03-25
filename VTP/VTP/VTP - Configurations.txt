@@ -1,0 +1,79 @@
+01. Create VLANs in SW1
+----------------------------
+
+Switch(config)#hostname SW1
+
+SW1(config)#vlan 10
+SW1(config-name)#name FTS
+
+
+02. Create trunk links between switches
+--------------------------------------
+
+SW1(config)#interface FastEthernet0/23
+SW1(config-if)#switchport mode trunk
+
+**************************************
+
+SW2(config)#interface FastEthernet0/23
+SW2(config-if)#switchport mode trunk
+
+SW2(config)#interface FastEthernet0/24
+SW2(config-if)#switchport mode trunk
+
+***************************************
+SW3(config)#interface FastEthernet0/24
+SW3(config-if)#switchport mode trunk
+
+
+
+03. Configure SW1 in VTP server, SW2 in VTP Transparent and SW3 in VTP client modes
+-----------------------------------------------------------------------------------
+
+SW1(config)#vtp domain FTS 
+SW1(config)#vtp password abc@123
+SW1(config)#vtp version 2
+SW1(config)#vtp mode server
+
+*******************************
+
+SW2(config)#vtp domain FTS 
+SW2(config)#vtp password abc@123
+SW2(config)#vtp version 2
+SW2(config)#vtp mode transparent
+
+********************************
+
+SW3(config)#vtp domain FTS 
+SW3(config)#vtp password abc@123
+SW3(config)#vtp version 2
+SW3(config)#vtp mode client
+
+
+
+
+04. Verification
+----------------
+
+To verify, I am creating vlan 20 with the name of BB and vlan 30 with the name of CC in SW1 (VTP Server mode)
+We can see vlan 20 with the name BB and vlan 30 with the name CC propogated to SW3, but not in SW2 (VTP transparent mode)
+
+SW1(config)#vlan 20
+SW1(config-name)#name BB
+
+SW1(config)#vlan 30
+SW1(config-name)#name CC
+
+
+
+
+To verify, I am creating vlan 99 with the name of Sec_Ad in SW2(VTP transparent mode), but we can not see Vlan 99 propogating to SW1 or SW3.
+
+
+SW3(config)#vlan 99
+SW3(config-name)#name Sec_Ad
+
+
+
+
+

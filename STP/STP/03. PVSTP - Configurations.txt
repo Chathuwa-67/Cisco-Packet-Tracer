@@ -1,0 +1,146 @@
+************************************************
+01.We have to create hostnames for both switches
+************************************************
+
+Switch(config)#hostname SW1
+
+Switch(config)#hostname SW2
+
+Switch(config)#hostname SW3
+
+
+
+
+
+**************************************************
+02.We have to create the Vlans in all the switches
+**************************************************
+(a). Create VLANs in Switch 01
+------------------------------
+SW1(config)#vlan 10
+SW1(config-vlan)#exit
+
+SW1(config)#vlan 20
+SW1(config-vlan)#exit
+
+SW1(config)#vlan 30
+SW1(config-vlan)#exit
+
+
+
+(b). Create VLANs in Switch 02
+------------------------------
+SW2(config)#vlan 10
+SW2(config-vlan)#exit
+
+SW2(config)#vlan 20
+SW2(config-vlan)#exit
+
+SW2(config)#vlan 30
+SW2(config-vlan)#exit
+
+
+
+(c). Create VLANs in Switch 03
+------------------------------
+SW3(config)#vlan 10
+SW3(config-vlan)#exit
+
+SW3(config)#vlan 20
+SW3(config-vlan)#exit
+
+SW3(config)#vlan 30
+SW3(config-vlan)#exit
+
+
+
+
+**************************************************************************************
+03.We have to configure trunk link between the switches to allow multiple VLAN traffic
+**************************************************************************************
+(a). Ports Gig 0/1 and Gig 0/2 on SW1 configured as trunk ports 
+    -----------------------------------------------------------
+
+    SW1(config)#interface range Gig0/1-2
+    SW1(config-if-range)#switchport mode trunk
+
+
+
+(b). Ports Gig 0/1 and Gig 0/2 on SW2 configured as trunk ports 
+    -----------------------------------------------------------
+
+    SW2(config)#interface range Gig0/1-2
+    SW2(config-if-range)#switchport mode trunk
+
+
+(b). Ports Gig 0/1 and Gig 0/2 on SW3 configured as trunk ports 
+    -----------------------------------------------------------
+
+    SW3(config)#interface range Gig0/1-2
+    SW3(config-if-range)#switchport mode trunk
+
+
+
+
+
+*****************************
+04.We have to configure PVSTP
+*****************************
+Configure SW1 as the Root Bridge for VLAN 10
+--------------------------------------------
+
+SW1(config)#spanning-tree vlan 10 root primary
+
+
+
+Configure SW2 as the Root Bridge for VLAN 20
+--------------------------------------------
+
+SW2(config)#spanning-tree vlan 20 root primary
+
+
+
+Configure SW3 as the Root Bridge for VLAN 30
+--------------------------------------------
+SW3(config)#spanning-tree vlan 30 root primary
+
+
+
+
+
+**************************************
+05. Verify spanning-tree configuration
+**************************************
+Switch#show spanning-tree vlan <VLAN ID>
+
+
+
+
+*****************************************************
+06.We have to save the configuration in both switches
+*****************************************************
+
+SW1#copy running-config startup-config    
+   (or)
+SW1#copy run start
+   (or)
+SW1#wr
+
+
+SW2#copy running-config startup-config    
+   (or)
+SW2#copy run start
+   (or)
+SW2#wr
+
+
+SW3#copy running-config startup-config    
+   (or)
+SW3#copy run start
+   (or)
+SW3#wr
+
+
+
+
+

@@ -1,0 +1,94 @@
+************************************************
+01.We have to create hostnames for both switches
+************************************************
+
+Switch(config)#hostname SW1
+
+Switch(config)#hostname SW2
+
+Switch(config)#hostname SW3
+
+
+
+
+
+***************************************************************************
+02.Configure trunk link between the switches to allow multiple VLAN traffic
+***************************************************************************
+(a). Ports Gig 0/1 and Gig 0/2 on SW1 configured as trunk ports 
+    -----------------------------------------------------------
+
+    SW1(config)#interface range Gig0/1-2
+    SW1(config-if-range)#switchport mode trunk
+
+
+
+(b). Ports Gig 0/1 and Gig 0/2 on SW2 configured as trunk ports 
+    -----------------------------------------------------------
+
+    SW2(config)#interface range Gig0/1-2
+    SW2(config-if-range)#switchport mode trunk
+
+
+(b). Ports Gig 0/1 and Gig 0/2 on SW3 configured as trunk ports 
+    -----------------------------------------------------------
+
+    SW3(config)#interface range Gig0/1-2
+    SW3(config-if-range)#switchport mode trunk
+
+
+
+
+
+************************************************
+03.We have to configure RSTP in all the Switches
+************************************************
+
+SW1(config)#spanning-tree mode rapid-pvst
+
+
+SW2(config)#spanning-tree mode rapid-pvst
+
+
+SW3(config)#spanning-tree mode rapid-pvst
+
+
+
+
+
+**************************************
+04. Verify spanning-tree configuration
+**************************************
+Switch#show spanning-tree 
+
+
+
+
+*****************************************************
+05.We have to save the configuration in both switches
+*****************************************************
+
+SW1#copy running-config startup-config    
+   (or)
+SW1#copy run start
+   (or)
+SW1#wr
+
+
+SW2#copy running-config startup-config    
+   (or)
+SW2#copy run start
+   (or)
+SW2#wr
+
+
+SW3#copy running-config startup-config    
+   (or)
+SW3#copy run start
+   (or)
+SW3#wr
+
+
+
+
+
