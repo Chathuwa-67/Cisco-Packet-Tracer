@@ -1,0 +1,102 @@
+
+*********************************
+01.Create the Vlans in the switch
+*********************************
+
+Switch(config)#vlan 10
+Switch(config-vlan)#name QA
+Switch(config-vlan)#exit
+
+Switch(config)#vlan 20
+Switch(config-vlan)#name DEV
+Switch(config-vlan)#exit
+
+Switch(config)#vlan 30
+Switch(config-vlan)#name Sales
+Switch(config-vlan)#exit
+
+Switch(config)#vlan 40
+Switch(config-vlan)#name HR
+Switch(config-vlan)#exit
+
+
+
+
+
+***************************************
+02.Assign Vlans to the respective ports
+***************************************
+
+Fa0/1 and Fa0/2,  are assigned to VLAN 10
+Fa0/3, Fa0/5, Fa0/7 and Fa0/8 are assigned to VLAN 20
+Fa0/9 and Fa0/10 are assigned to VLAN 30
+Fa0/20, Fa0/21 and Fa0/22 are assigned to VLAN 40
+
+
+Switch(config)#interface range fa0/1-2
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 10
+Switch(config-if-range)#exit
+
+Switch(config)#interface fa0/3
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport access vlan 20
+Switch(config-if)#exit
+
+Switch(config)#interface fa0/5
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport access vlan 20
+Switch(config-if)#exit
+
+Switch(config)#interface range fa0/7-8
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#exit
+
+Switch(config)#interface range fa0/9-10
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#exit
+
+Switch(config)#interface range fa0/20-22
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 40
+Switch(config-if-range)#exit
+
+
+******************************************************************
+03. Verify the VLAN configuration and port assignment to the VLANs
+******************************************************************
+
+Switch#show vlan brief
+
+
+
+***************************************************
+04.We have to save the configuration in the switch
+***************************************************
+
+Switch#copy running-config startup-config    
+   (or)
+Switch#copy run start
+   (or)
+Switch#wr
+
+
+
+*****************************************
+05. Configure IP addresses in end devices 
+******************************************
+
+
+
+
+********************************************
+06.Verify the connectivity between same VLANs
+********************************************
+
+
+
+
+
+
