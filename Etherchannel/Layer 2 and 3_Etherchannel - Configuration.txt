@@ -1,0 +1,83 @@
+Topology 01 - Layer 2 Etherchannel using PAgP Protocol
+______________________________________________________
+
+Switch(config)#hostname SW1
+
+
+SW1(config)#Interface range fa0/1-4
+SW1(config-if-range)#channel-group 1 mode desirable
+SW1(config-if-range)#switchport mode trunk
+SW1(config-if-range)#switchport trunk encapsulation dot1q
+
+**********************************************************
+
+Switch(config)#hostname SW2
+
+SW2(config)#Interface range fa0/1-4
+SW2(config-if-range)#channel-group 1 mode desirable
+SW2(config-if-range)#switchport mode trunk
+SW2(config-if-range)#switchport trunk encapsulation dot1q
+
+**********************************************************
+
+
+
+
+
+Topology 02 - Manually forming Layer 2 Etherchannel
+___________________________________________________
+
+Switch(config)#hostname SW1
+
+
+SW1(config)#Interface range Gig0/1-2
+SW1(config-if-range)#channel-group 6 mode on
+SW1(config-if-range)#switchport mode trunk
+SW1(config-if-range)#switchport trunk encapsulation dot1q
+
+*********************************************************
+
+Switch(config)#hostname SW2
+
+
+SW2(config)#Interface range Gig0/1-2
+SW2(config-if-range)#channel-group 6 mode on
+SW2(config-if-range)#switchport mode trunk
+SW2(config-if-range)#switchport trunk encapsulation dot1q
+
+
+
+
+
+
+
+Topology 03 - Layer 3 Etherchannel with LACP Protocol
+_____________________________________________________
+
+Switch(config)#hostname SW1
+
+
+SW1(config)#Interface range fa0/1-4
+SW1(config-if-range)#no switchport
+SW1(config-if-range)#channel-group 2 mode active
+
+*********************************************************
+
+Switch(config)#hostname SW2
+
+SW2(config)#Interface range fa0/1-4
+SW2(config-if-range)#no switchport
+SW2(config-if-range)#channel-group 2 mode active
+
+
+*********************************************************
+
+SW1(config)#interface Port-channel 2
+SW1(config-if)#ip address 192.168.100.1 255.255.255.0
+
+
+*********************************************************
+
+SW2(config)#interface Port-channel 2
+SW2(config-if)#ip address 192.168.100.2 255.255.255.0
+ 
