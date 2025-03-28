@@ -1,0 +1,113 @@
+01. Configure the IP addresses on Router's Interfaces
+*****************************************************
+
+On BR-1
+-------
+Router (config)#Hostname BR-1
+
+
+BR-1(config)#interface Gig 0/0
+BR-1(config-if)#ip address 192.168.1.100 255.255.255.0
+BR-1(config-if)#no shutdown
+
+BR-1(config)#interface Gig 0/1
+BR-1(config-if)#ip address 10.0.0.1 255.0.0.0
+BR-1(config-if)#no shutdown
+
+
+
+On BR-2
+-------
+Router (config)#Hostname BR-2
+
+
+BR-2(config)#interface Gig 0/0
+BR-2(config-if)#ip address 192.168.2.100 255.255.255.0
+BR-2(config-if)#no shutdown
+
+BR-2(config)#interface Gig 0/1
+BR-2(config-if)#ip address 20.0.0.1 255.0.0.0
+BR-2(config-if)#no shutdown
+
+
+On BR-3
+-------
+Router (config)#Hostname BR-3
+
+
+BR-3(config)#interface Gig 0/0
+BR-3(config-if)#ip address 192.168.3.100 255.255.255.0
+BR-3(config-if)#no shutdown
+
+BR-3(config)#interface Gig 0/1
+BR-3(config-if)#ip address 30.0.0.1 255.0.0.0
+BR-3(config-if)#no shutdown
+
+
+On HO
+-----
+Router (config)#Hostname HO
+
+
+HO(config)#interface Gig 0/0
+HO(config-if)#ip address 10.0.0.2 255.0.0.0
+HO(config-if)#no shutdown
+
+HO(config)#interface Gig 0/1
+HO(config-if)#ip address 20.0.0.2 255.0.0.0
+HO(config-if)#no shutdown
+
+HO(config)#interface Gig 0/1
+HO(config-if)#ip address 30.0.0.2 255.0.0.0
+HO(config-if)#no shutdown
+
+
+
+
+02. Configure OSPF Routing
+**************************
+
+On BR-1
+-------
+BR-1(config)#router ospf 1
+BR-1(config-router)#router-id 1.1.1.1
+BR-1(config-router)#network 192.168.1.0 0.0.0.255 area 0
+BR-1(config-router)#network 10.0.0.0 0.255.255.255 area 0
+BR-1(config-router)#exit
+
+
+On BR-2
+-------
+BR-2(config)#router ospf 1
+BR-2(config-router)#router-id 2.2.2.2
+BR-2(config-router)#network 192.168.2.0 0.0.0.255 area 0
+BR-2(config-router)#network 20.0.0.0 0.255.255.255 area 0
+BR-2(config-router)#exit
+
+
+On BR-3
+-------
+BR-3(config)#router ospf 1
+BR-3(config-router)#router-id 3.3.3.3
+BR-3(config-router)#network 192.168.3.0 0.0.0.255 area 0
+BR-3(config-router)#network 30.0.0.0 0.255.255.255 area 0
+BR-3(config-router)#exit
+
+
+On HO
+-----
+HO(config)#router ospf 1
+HO(config-router)#router-id 4.4.4.4
+HO(config-router)#network 10.0.0.0 0.255.255.255 area 0
+HO(config-router)#network 20.0.0.0 0.255.255.255 area 0
+HO(config-router)#network 30.0.0.0 0.255.255.255 area 0
+HO(config-router)#exit
+
+
+
+03. Gateway IP address configuration on end devices
+***************************************************
+
+Gateway IP for 192.168.1.0/24 network :- 192.168.1.100
+Gateway IP for 192.168.2.0/24 network :- 192.168.2.100
+Gateway IP for 192.168.3.0/24 network :- 192.168.3.100
