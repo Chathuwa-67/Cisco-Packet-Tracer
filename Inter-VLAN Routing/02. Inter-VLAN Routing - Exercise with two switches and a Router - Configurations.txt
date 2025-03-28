@@ -1,0 +1,166 @@
+*******************************************
+01. Configure PCs IP addresses and Gateways
+*******************************************
+Gateway for VLAN 10 devices  :- 192.168.10.254/24
+Gateway for VLAN 20 devices  :- 192.168.20.254/24
+Gateway for VLAN 30 devices  :- 192.168.30.254/24
+
+
+
+
+********************************
+02. Create VLANs in the Switch 1
+********************************
+Switch(config)#hostname SW1
+
+SW1(config)#vlan 10
+SW1(config-vlan)#name SS
+SW1(config-vlan)#exit
+
+SW1(config)#vlan 20
+SW1(config-vlan)#name DBS
+SW1(config-vlan)#exit
+
+SW1(config)#vlan 30
+SW1(config-vlan)#name FS
+SW1(config-vlan)#exit
+
+
+
+********************************
+03. Create VLANs in the Switch 2
+********************************
+Switch(config)#hostname SW2
+
+SW2(config)#vlan 10
+SW2(config-vlan)#name SS
+SW2(config-vlan)#exit
+
+SW2(config)#vlan 20
+SW2(config-vlan)#name DBS
+SW2(config-vlan)#exit
+
+SW2(config)#vlan 30
+SW2(config-vlan)#name FS
+SW2(config-vlan)#exit
+
+
+****************************************************
+04. Assign ports to respective VLANS in the Switch 1
+****************************************************
+SW1(config)#interface range fa0/1-2
+SW1(config-if-range)#switchport mode access 
+SW1(config-if-range)#switchport access vlan 10
+SW1(config-if-range)#exit
+
+
+SW1(config)#interface range fa0/3-4
+SW1(config-if-range)#switchport mode access 
+SW1(config-if-range)#switchport access vlan 20
+SW1(config-if-range)#exit
+
+
+SW1(config)#interface range fa0/10
+SW1(config-if)#switchport mode access 
+SW1(config-if)#switchport access vlan 30
+SW1(config-if)#exit
+
+SW1(config)#interface range fa0/15
+SW1(config-if)#switchport mode access 
+SW1(config-if)#switchport access vlan 30
+SW1(config-if)#exit
+
+
+
+****************************************************
+05. Assign ports to respective VLANS in the Switch 2
+****************************************************
+
+SW2(config)#interface range fa0/1
+SW2(config-if)#switchport mode access 
+SW2(config-if)#switchport access vlan 10
+SW2(config-if)#exit
+
+
+SW2(config)#interface range fa0/2
+SW2(config-if)#switchport mode access 
+SW2(config-if)#switchport access vlan 20
+SW2(config-if)#exit
+
+SW2(config)#interface range fa0/3
+SW2(config-if)#switchport mode access 
+SW2(config-if)#switchport access vlan 30
+SW2(config-if)#exit
+
+
+
+
+
+***********************************************************
+06. Configure link between Switch 1 and Switch 2 as trunk
+***********************************************************
+SW1(config)#interface fa0/24
+SW1(config-if)#switchport mode trunk
+
+
+SW2(config)#interface fa0/24
+SW2(config-if)#switchport mode trunk
+
+
+***********************************************************
+07. Configure ports connecting Router and Switch 1 as trunk
+***********************************************************
+SW1(config)#interface fa0/23
+SW1(config-if)#switchport mode trunk
+
+
+
+
+********************************************************************************************************************
+08. Create sub interfaces on the physiacal port GigabitEthernet 0/0/1 and configure IP address to the sub interfaces
+********************************************************************************************************************
+Gig 0/0/1.10 sub interface :- VLAN 10 Gateway, IP address - 192.168.10.254/24
+Gig 0/0/1.20 sub interface :- VLAN 20 Gateway, IP address - 192.168.20.254/24
+Gig 0/0/1.30 sub interface :- VLAN 30 Gateway, IP address - 192.168.30.254/24
+
+
+
+(a). Configure hostname of the Router as R1
+-------------------------------------------
+Router(config)#hostname R1
+
+
+(b). First of all we have to make the physical interface GigabitEthernet 0/0/1 up
+---------------------------------------------------------------------------------
+
+R1(config)#interface GigabitEthernet 0/0/1
+R1(config-if)#no shutdown
+
+
+
+(c). Create sub interfaces with IP addresses
+--------------------------------------------
+
+(i). Craete sub interface (VLAN Gateway) for VLAN 10
+
+R1(config)#interface GigabitEthernet 0/0/1.10
+R1(config-sub-if)#encapsulation dot1q 10
+R1(config-sub-if)#ip address 192.168.10.254  255.255.255.0
+R1(config-sub-if)#exit
+
+
+(ii). Craete sub interface (VLAN Gateway) for VLAN 20
+
+R1(config)#interface GigabitEthernet 0/0/1.20
+R1(config-sub-if)#encapsulation dot1q 20
+R1(config-sub-if)#ip address 192.168.20.254  255.255.255.0
+R1(config-sub-if)#exit
+
+
+(iii). Craete sub interface (VLAN Gateway) for VLAN 30
+
+R1(config)#interface GigabitEthernet 0/0/1.30
+R1(config-sub-if)#encapsulation dot1q 30
+R1(config-sub-if)#ip address 192.168.30.254  255.255.255.0
+R1(config-sub-if)#exit
+

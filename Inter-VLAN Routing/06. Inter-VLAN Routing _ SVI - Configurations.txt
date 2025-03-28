@@ -1,0 +1,162 @@
+**********************************************************************************************************
+01.We need to do subnetting for the Address Space 192.168.1.0/24 to have 4 Subnets (We have 4 departments)
+**********************************************************************************************************
+
+Converted bits, n = 2
+No of subnets, 2 to the Power 2 = 4
+Host bits, h = 6
+Range = 2 to the Power 6 = 64
+
+         
+Network Address	       Broadcast Address	    Usable IP address range	
+192.168.1.0/26	       192.168.1.63	                192.168.1.1   - 192.168.1.62	   
+192.168.1.64/26        192.168.1.127	            192.168.1.65  - 192.168.1.126
+192.168.1.128/26       192.168.1.191                192.168.1.129 - 192.168.1.190
+192.168.1.192/26       192.168.1.255                192.168.1.193 - 192.168.1.254
+
+
+
+******************************************************
+02. Configure IP addresses and Gateways on end devices
+******************************************************
+
+Gateway for VLAN 10 devices  :- 192.168.1.62/26  (subnet mask - 255.255.255.192)
+Gateway for VLAN 20 devices  :- 192.168.1.126/26 (subnet mask - 255.255.255.192)
+Gateway for VLAN 30 devices  :- 192.168.1.190/26 (subnet mask - 255.255.255.192)
+Gateway for VLAN 40 devices  :- 192.168.1.254/26 (subnet mask - 255.255.255.192)
+
+
+
+
+************************************
+03. Configure hostname on the switch
+************************************
+
+Switch(config)#hostname SW
+
+
+
+
+
+******************************
+04. Create VLANs on the switch
+******************************
+
+SW(config)#vlan 10
+SW(config-vlan)#name FTS
+SW(config-vlan)#exit
+
+SW(config)#vlan 20
+SW(config-vlan)#name FAS
+SW(config-vlan)#exit
+
+SW(config)#vlan 30
+SW(config-vlan)#name FBS
+SW(config-vlan)#exit
+
+SW(config)#vlan 40
+SW(config-vlan)#name SVR
+SW(config-vlan)#exit
+
+
+
+**************************************************
+05. Assign ports to respective VLANS on the switch
+**************************************************
+
+SW(config)#interface range fa0/1-5
+SW(config-if-range)#switchport mode access
+SW(config-if-range)#switchport access vlan 10
+SW(config-if-range)#exit
+
+
+SW(config)#interface range fa0/6-9
+SW(config-if-range)#switchport mode access
+SW(config-if-range)#switchport access vlan 20
+SW(config-if-range)#exit
+
+
+SW(config)#interface range fa0/10-12
+SW(config-if-range)#switchport mode access
+SW(config-if-range)#switchport access vlan 30
+SW(config-if-range)#exit
+
+SW(config)#interface fa0/13
+SW(config-if)#switchport mode access
+SW(config-if)#switchport access vlan 40
+SW(config-if)#exit
+
+SW(config)#interface fa0/15
+SW(config-if)#switchport mode access
+SW(config-if)#switchport access vlan 40
+SW(config-if)#exit
+
+
+
+
+
+**************************************************
+06. Create Switch Virtual Interfaces on the switch 
+**************************************************
+SVI for VLAN 10 (VLAN 10 Gateway),  IP address - 192.168.1.62/26
+SVI for VLAN 20 (VLAN 20 Gateway),  IP address - 192.168.1.126/26
+SVI for VLAN 30 (VLAN 30 Gateway),  IP address - 192.168.1.190/26
+SVI for VLAN 40 (VLAN 40 Gateway),  IP address - 192.168.1.254/26
+
+
+Create Switch Virtual Interfaces (SVIs)
+---------------------------------------
+
+(i). Switch Virtual Interface (SVI) for VLAN 10
+
+SW(config)#interface vlan 10
+SW(config-if)#ip address 192.168.1.62  255.255.255.192
+SW(config-if)#no shutdown
+SW(config-if)#exit
+
+
+(ii). Switch Virtual Interface (SVI) for VLAN 100
+
+SW(config)#interface vlan 20
+SW(config-if)#ip address 192.168.1.126  255.255.255.192
+SW(config-if)#no shutdown
+SW(config-if)#exit
+
+
+
+(iii). Switch Virtual Interface (SVI) for VLAN 150
+
+SW(config)#interface vlan 30
+SW(config-if)#ip address 192.168.1.190  255.255.255.192
+SW(config-if)#no shutdown
+SW(config-if)#exit
+
+
+
+(iv). Switch Virtual Interface (SVI) for VLAN 200
+
+SW(config)#interface vlan 40
+SW(config-if)#ip address 192.168.1.254  255.255.255.192
+SW(config-if)#no shutdown
+SW(config-if)#exit
+
+
+
+
+**********************************************************************************************************************************************************************
+06. Enable routing on Multi Layer (Layer 3) Switch  - By default routing is disabled on Layer 3 switch, so we have to enable the routing using "ip routing" command
+**********************************************************************************************************************************************************************
+
+SW(config)#ip routing
+
+
+
+********************************************************************************
+07. Verify the connectivity by using "ping" command between different VLAN users
+********************************************************************************
+
+
+
+
+
+
