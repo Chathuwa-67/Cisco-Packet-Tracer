@@ -1,0 +1,88 @@
+*****************************************************
+01. Configure the IP addresses on Router's Interfaces
+*****************************************************
+
+On R1
+-----
+Router (config)#Hostname R1
+
+
+R1(config)#interface Gig 0/0
+R1(config-if)#ip address 192.168.1.254 255.255.255.0
+R1(config-if)#no shutdown
+
+R1(config)#interface Gig 0/1
+R1(config-if)#ip address 192.168.12.1 255.255.255.252
+R1(config-if)#no shutdown
+
+
+
+On R2
+-----
+Router (config)#Hostname R2
+
+
+R2(config)#interface Gig 0/0
+R2(config-if)#ip address 192.168.2.254 255.255.255.0
+R2(config-if)#no shutdown
+
+
+R2(config)#interface Gig 0/1
+R2(config-if)#ip address 192.168.12.2 255.255.255.252
+R2(config-if)#no shutdown
+
+R2(config)#interface Gig 0/2
+R2(config-if)#ip address 192.168.23.1 255.255.255.252
+R2(config-if)#no shutdown
+
+
+On R3
+-----
+Router (config)#Hostname R3
+
+
+R3(config)#interface Gig 0/0
+R3(config-if)#ip address 192.168.3.254 255.255.255.0
+R3(config-if)#no shutdown
+
+R3(config)#interface Gig 0/2
+R2(config-if)#ip address 192.168.23.2 255.255.255.252
+R3(config-if)#no shutdown
+
+
+
+
+
+****************************
+02. Configure Static Routing
+****************************
+
+On R1
+-----
+R1(config)#ip route 192.168.2.0 255.255.255.0 192.168.12.2 
+R1(config)#ip route 192.168.3.0 255.255.255.0 192.168.12.2 
+R1(config)#ip route 192.168.23.0 255.255.255.252 192.168.12.2
+
+
+
+On R2
+-----
+R2(config)#ip route 192.168.1.0 255.255.255.0 192.168.12.1
+R2(config)#ip route 192.168.3.0 255.255.255.0 192.168.23.2 
+
+ 
+
+On R3
+-----
+R3(config)#ip route 192.168.1.0 255.255.255.0 192.168.23.1 
+R3(config)#ip route 192.168.2.0 255.255.255.0 192.168.23.1
+R3(config)#ip route 192.168.12.0 255.255.255.252 192.168.23.1  
+
+
+
+******************************************************
+03. Configure IP addresses and Gateways in end devices
+******************************************************
+Gateway IP address for the devices in Network 192.168.1.0/24 = Gig 0/0 interface in R1 (192.168.1.254)
+Gateway IP address for the devices in Network 192.168.2.0/24 = Gig 0/0 interface in R2 (192.168.1.254)
+Gateway IP address for the devices in Network 192.168.3.0/24 = Gig 0/0 interface in R2 (192.168.3.254)

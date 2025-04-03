@@ -1,0 +1,115 @@
+*****************************************************
+01. Configure the IP addresses on Router's Interfaces
+*****************************************************
+
+On Branch 1 Router
+------------------
+Router (config)#Hostname BR-1
+
+
+BR-1(config)#interface Gig 0/0/0
+BR-1(config-if)#ip address 192.168.1.100 255.255.255.0
+BR-1(config-if)#no shutdown
+
+BR-1(config)#interface Gig 0/0/1
+BR-1(config-if)#ip address 10.0.0.1 255.0.0.0
+BR-1(config-if)#no shutdown
+
+
+
+On Branch 2 Router
+------------------
+Router (config)#Hostname BR-2
+
+
+BR-2(config)#interface Gig 0/0/0
+BR-2(config-if)#ip address 192.168.2.100 255.255.255.0
+BR-2(config-if)#no shutdown
+
+BR-2(config)#interface Gig 0/0/1
+BR-2(config-if)#ip address 20.0.0.1 255.0.0.0
+BR-2(config-if)#no shutdown
+
+
+
+On Branch 3 Router
+------------------
+Router (config)#Hostname BR-3
+
+
+BR-3(config)#interface Gig 0/0/0
+BR-3(config-if)#ip address 192.168.3.100 255.255.255.0
+BR-3(config-if)#no shutdown
+
+BR-3(config)#interface Gig 0/0/1
+BR-3(config-if)#ip address 30.0.0.1 255.0.0.0
+BR-3(config-if)#no shutdown
+
+
+
+On HO Router
+------------------
+Router (config)#Hostname HO
+
+
+HO(config)#interface Gig 0/0/0
+HO(config-if)#ip address 10.0.0.2 255.0.0.0
+HO(config-if)#no shutdown
+
+HO(config)#interface Gig 0/0/1
+HO(config-if)#ip address 20.0.0.2 255.0.0.0
+HO(config-if)#no shutdown
+
+HO(config)#interface Gig 0/0/2
+HO(config-if)#ip address 30.0.0.2 255.0.0.0
+HO(config-if)#no shutdown
+
+
+
+
+****************************
+02. Configure Static Routing
+****************************
+
+On BR-1
+-------
+BR-1(config)#ip route 20.0.0.0 255.0.0.0 10.0.0.2  
+BR-1(config)#ip route 30.0.0.0 255.0.0.0 10.0.0.2 
+BR-1(config)#ip route 192.168.2.0 255.255.255.0 10.0.0.2 
+BR-1(config)#ip route 192.168.3.0 255.255.255.0 10.0.0.2 
+
+
+
+On BR-2
+-------
+BR-2(config)#ip route 10.0.0.0 255.0.0.0 20.0.0.2  
+BR-2(config)#ip route 30.0.0.0 255.0.0.0 20.0.0.2 
+BR-2(config)#ip route 192.168.1.0 255.255.255.0 20.0.0.2 
+BR-2(config)#ip route 192.168.3.0 255.255.255.0 20.0.0.2 
+
+ 
+
+On BR-3
+-------
+BR-3(config)#ip route 10.0.0.0 255.0.0.0 30.0.0.2 
+BR-3(config)#ip route 20.0.0.0 255.0.0.0 30.0.0.2 
+BR-3(config)#ip route 192.168.1.0 255.255.255.0 30.0.0.2 
+BR-3(config)#ip route 192.168.2.0 255.255.255.0 30.0.0.2 
+
+
+
+On HO
+-----
+HO(config)#ip route 192.168.1.0 255.255.255.0 10.0.0.1 
+HO(config)#ip route 192.168.2.0 255.255.255.0 20.0.0.1 
+HO(config)#ip route 192.168.3.0 255.255.255.0 30.0.0.1 
+
+
+
+
+******************************************************
+03. Configure IP addresses and Gateways in end devices
+******************************************************
+Gateway IP address for the devices in Network 192.168.1.0/24 = Gig 0/0/0 interface in BR-1 (192.168.1.100)
+Gateway IP address for the devices in Network 192.168.2.0/24 = Gig 0/0/0 interface in BR-2 (192.168.2.100)
+Gateway IP address for the devices in Network 192.168.3.0/24 = Gig 0/0/0 interface in BR-3 (192.168.3.100)
