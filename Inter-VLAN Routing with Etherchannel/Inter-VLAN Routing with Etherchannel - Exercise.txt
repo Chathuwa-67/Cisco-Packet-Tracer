@@ -1,0 +1,185 @@
+01. Configure IP adds and Gateways IP adds in End devices
+*********************************************************
+VLAN 10, GW IP - 192.168.10.100;   IP Add - 192.168.10.1,2,3
+VLAN 20, GW IP - 192.168.20.100;   IP Add - 192.168.20.1
+VLAN 30, GW IP - 192.168.30.100;   IP Add - 192.168.30.1
+VLAN 40, GW IP - 192.168.40.100;   IP Add - 192.168.40.1
+
+
+02. Configure VLANs and Port assignments in SW1
+***********************************************
+SW1(config)#vlan 10
+SW1(config-vlan)#name ITAdm
+SW1(config-vlan)#exit
+
+SW1(config)#vlan 20
+SW1(config-vlan)#name MailSVR
+SW1(config-vlan)#exit
+
+SW1(config)#vlan 30
+SW1(config-vlan)#name WebSVR
+SW1(config-vlan)#exit
+
+SW1(config)#vlan 40
+SW1(config-vlan)#name DBSVR
+SW1(config-vlan)#exit
+
+SW1(config)#interface range Fa0/5-7
+SW1(config-if-range)#switchport mode access 
+SW1(config-if-range)#switchport access vlan 10
+SW1(config-if-range)#exit
+
+
+SW1(config)#interface Fa0/8
+SW1(config-if)#switchport mode access 
+SW1(config-if)#switchport access vlan 20
+SW1(config-if)#exit
+
+SW1(config)#interface Fa0/9
+SW1(config-if)#switchport mode access 
+SW1(config-if)#switchport access vlan 30
+SW1(config-if)#exit
+
+SW1(config)#interface Fa0/10
+SW1(config-if)#switchport mode access 
+SW1(config-if)#switchport access vlan 40
+SW1(config-if)#exit
+
+
+03. Configure VLANs in SW2
+**************************
+SW2(config)#vlan 10
+SW2(config-vlan)#name ITAdm
+SW2(config-vlan)#exit
+
+SW2(config)#vlan 20
+SW2(config-vlan)#name MailSVR
+SW2(config-vlan)#exit
+
+SW2(config)#vlan 30
+SW2(config-vlan)#name WebSVR
+SW2(config-vlan)#exit
+
+SW2(config)#vlan 40
+SW2(config-vlan)#name DBSVR
+SW2(config-vlan)#exit
+
+
+
+04. Configure VLANs in SW3
+**************************
+SW3(config)#vlan 10
+SW3(config-vlan)#name ITAdm
+SW3(config-vlan)#exit
+
+SW3(config)#vlan 20
+SW3(config-vlan)#name MailSVR
+SW3(config-vlan)#exit
+
+SW3(config)#vlan 30
+SW3(config-vlan)#name WebSVR
+SW3(config-vlan)#exit
+
+SW3(config)#vlan 40
+SW3(config-vlan)#name DBSVR
+SW3(config-vlan)#exit
+
+
+05. Create EtherChannel between Switches
+****************************************
+i). Between SW1 and SW2
+-----------------------
+SW1(config)#interface range Fa0/1-2
+SW1(config-if-range)#channel-group 1 mode on
+SW1(config-if-range)#switchport mode trunk
+SW1(config-if-range)#exit
+
+SW2(config)#interface range Fa0/1-2
+SW2(config-if-range)#channel-group 1 mode on
+SW2(config-if-range)#switchport mode trunk
+SW2(config-if-range)#exit
+
+
+ii). Between SW1 and SW3
+-----------------------
+SW1(config)#interface range Fa0/3-4
+SW1(config-if-range)#channel-group 2 mode on
+SW1(config-if-range)#switchport mode trunk
+SW1(config-if-range)#exit
+
+SW3(config)#interface range Fa0/3-4
+SW3(config-if-range)#channel-group 2 mode on
+SW3(config-if-range)#switchport mode trunk
+SW3(config-if-range)#exit
+
+
+iii). Between SW2 and SW3
+-------------------------
+SW2(config)#interface range Fa0/3-4
+SW2(config-if-range)#channel-group 3 mode on
+SW2(config-if-range)#switchport mode trunk
+SW2(config-if-range)#exit
+
+SW3(config)#interface range Fa0/5-6
+SW3(config-if-range)#channel-group 3 mode on
+SW3(config-if-range)#switchport mode trunk
+SW3(config-if-range)#exit
+
+
+
+06. Create trunk link between SW3 and Router
+********************************************
+SW3(config)#interface Fa0/24
+SW3(config-if)#switchport mode trunk
+SW3(config-if)#exit
+
+
+07. Create VLAN gateways(Sub interfaces) in R1
+**********************************************
+i). Bring the Router Port Gig0/0/1 up
+-------------------------------------
+R1(config)#interface Gig0/0/1
+R1(config-if)#no shut
+R1(config-if)#exit
+
+
+ii). Create Sub interface for VLAN 10 (Gateway for VLAN 10)
+-----------------------------------------------------------
+R1(config)#interface Gig0/0/1.10
+R1(config-if)#encapsulation dot1q 10
+R1(config-if)#ip address 192.168.10.100 255.255.255.0
+R1(config-if)#exit
+
+
+iii). Create Sub interface for VLAN 20 (Gateway for VLAN 20)
+------------------------------------------------------------
+R1(config)#interface Gig0/0/1.20
+R1(config-if)#encapsulation dot1q 20
+R1(config-if)#ip address 192.168.20.100 255.255.255.0
+R1(config-if)#exit
+
+iv). Create Sub interface for VLAN 30 (Gateway for VLAN 30)
+------------------------------------------------------------
+R1(config)#interface Gig0/0/1.30
+R1(config-if)#encapsulation dot1q 30
+R1(config-if)#ip address 192.168.30.100 255.255.255.0
+R1(config-if)#exit
+
+v). Create Sub interface for VLAN 40 (Gateway for VLAN 40)
+------------------------------------------------------------
+R1(config)#interface Gig0/0/1.40
+R1(config-if)#encapsulation dot1q 40
+R1(config-if)#ip address 192.168.40.100 255.255.255.0
+R1(config-if)#exit
+
+
+
+08. Save the configurations in Switches and Router
+**************************************************
+SW1 or Sw2 or SW3  or R1#copy running-config startup-config
+
+SW1 or Sw2 or SW3 or R1#copy run start
+
+SW1 or Sw2 or SW3 or R1#write
+
+SW1 or Sw2 or SW3 or R1#wr
